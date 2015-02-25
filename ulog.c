@@ -47,7 +47,7 @@ static const char *ulog_default_ident(void)
 		fclose(self);
 	}
 
-	return p ? p : "";
+	return p;
 }
 
 static void ulog_defaults(void)
@@ -93,7 +93,7 @@ static void ulog_kmsg(int priority, const char *fmt, va_list ap)
 	if ((kmsg = fopen("/dev/kmsg", "w")) != NULL) {
 		fprintf(kmsg, "<%u>", priority);
 
-		if (*_ulog_ident)
+		if (_ulog_ident)
 			fprintf(kmsg, "%s: ", _ulog_ident);
 
 		vfprintf(kmsg, fmt, ap);
@@ -108,7 +108,7 @@ static void ulog_stdio(int priority, const char *fmt, va_list ap)
 	if (priority == LOG_INFO || priority == LOG_NOTICE)
 		out = stdout;
 
-	if (*_ulog_ident)
+	if (_ulog_ident)
 		fprintf(out, "%s: ", _ulog_ident);
 
 	vfprintf(out, fmt, ap);
